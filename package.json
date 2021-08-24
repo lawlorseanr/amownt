@@ -1,0 +1,47 @@
+{
+  "description": "Accounting and Bookkeeping software for the modern startup",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lawlorseanr/amownt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "name": "amownt",
+  "version": "0.1.0",
+  "private": false,
+  "scripts": {
+    "start": "nodemon ./server/index.js",
+    "build": "npx webpack --mode=development -w"
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "node": "^16.6.1",
+    "nodemon": "^2.0.12",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^1.1.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.24.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^4.8.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  }
+}
