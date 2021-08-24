@@ -1,6 +1,7 @@
-const Router = require('express').Router();
+const router = require('express').Router();
+const Transactions =
 
-Router
-  .get('/', (req, res) => res.status(200).send('Wingardium leviosa!'));
+router
+  .get('/', (req, res, next) => res.status(200).send('Wingardium leviosa!'));
 
-module.exports = Router;
+module.exports = router;

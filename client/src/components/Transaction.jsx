@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
-export default ({ transaction }) => {
-  const [isSnoozed, setSnoozed] = useState(false);
-
+export default ({ transaction, changeActiveState }) => {
   return (
     <div className='transaction'>
       <div className='transaction-info'>
@@ -23,11 +21,11 @@ export default ({ transaction }) => {
         <div className='transaction-amount'>Amount: {transaction.amount}</div>
         <input
           type='submit'
-          value='Snooze'
+          value={transaction.isActive ? 'Snooze' : 'Un-snooze'}
           className='transaction-action'
           onClick={(e) => {
             e.preventDefault();
-            setSnoozed(!isSnoozed);
+            changeActiveState(transaction.id);
           }}/>
         <input
           type='submit'
