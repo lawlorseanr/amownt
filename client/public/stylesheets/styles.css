@@ -1,3 +1,7 @@
+html {
+  overflow-y: scroll;
+}
+
 body {
   font-size: 10pt;
   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -67,6 +71,17 @@ h1#header-text {
   display: flex;
   flex: 1;
   justify-content: space-between;
+}
+
+#transaction-list-action {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content:flex-end;
+}
+button#fetch-data-button {
+  height: 33.99;
+  margin: auto 10px auto 0;
 }
 
 /* ===========

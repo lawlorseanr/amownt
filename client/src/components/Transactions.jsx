@@ -1,5 +1,6 @@
 import React from 'react';
 import TransactionList from './Transactions/TransactionList.jsx';
+import axios from 'axios';
 
 class Transactions extends React.Component {
   constructor() {
@@ -8,15 +9,25 @@ class Transactions extends React.Component {
     this.state = {
       transactionsPage: true,
       activeIsDisplayed: true,
-      transactions: [
-        {id: 1, amount: 100, account: 'Chase', date: '1/1/1000', isActive: true},
-        {id: 2, amount: 200, account: 'Chase', date: '1/1/1000', isActive: true},
-        {id: 3, amount: 300, account: 'Chase', date: '1/1/1000', isActive: false},
-      ],
+      transactions: [],
+      fetchAttempt: 0,
     }
 
     this.changeActiveIsDisplayed = this.changeActiveIsDisplayed.bind(this);
     this.changeActiveState = this.changeActiveState.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+  }
+
+  fetchData() {
+    axios.get('http://localhost:3000/api/transactions')
+      .then((response) => {
+        this.setState({
+          transactions: response.data,
+        })
+      })
+      .catch((error) => {
+        console.error(error);
+      })
   }
 
   changeActiveIsDisplayed() {
@@ -35,25 +46,37 @@ class Transactions extends React.Component {
     this.setState({ transactions: updatedTransactions });
   }
 
+  componentDidMount() {
+    setTimeout(this.fetchData, 3500);
+  }
+
   render() {
     return (
       <div id='transactions'>
         <div id='transactions-filter'>
-          <h3>Transactions</h3>
-          <label htmlFor='delay-toggle' className='switch'>
-            <input
-              id='delay-toggle'
-              type='checkbox'
-              onChange={(e) => this.changeActiveIsDisplayed()}
-            />
-            <span className='slider' />
-          </label>
+          <h3>Reconciliation</h3>
+          <div id='transaction-list-action'>
+            <button
+              id='fetch-data-button'
+              type='Submit'
+              onClick={(e) => {
+                e.preventDefault();
+                this.fetchData();
+              }}>
+            Fetch Data
+            </button>
+            <label htmlFor='delay-toggle' className='switch'>
+              <input
+                id='delay-toggle'
+                type='checkbox'
+                onChange={() => this.changeActiveIsDisplayed()}
+              />
+              <span className='slider' />
+            </label>
+          </div>
         </div>
-
-
         <TransactionList
-          activeIsDisplayed={this.state.activeIsDisplayed}
-          transactions={this.state.transactions}
+          state={this.state}
           changeActiveState={this.changeActiveState}/>
       </div>
     );

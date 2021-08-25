@@ -1,7 +1,8 @@
 import React from 'react';
 import Transaction from './Transaction.jsx';
 
-export default ({ activeIsDisplayed, changeActiveState, transactions }) => {
+export default ({ state, changeActiveState }) => {
+  const { activeIsDisplayed, transactions } = state;
   return (
     <div id='transaction-list'>
       {transactions.reduce((accumulator, transaction) => {
