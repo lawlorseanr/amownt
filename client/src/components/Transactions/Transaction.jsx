@@ -18,19 +18,23 @@ export default ({ transaction, changeActiveState }) => {
         </label>
       </div>
       <div className='transaction-action'>
-        <div className='transaction-amount'>Amount: {transaction.amount}</div>
-        <input
-          type='submit'
-          value={transaction.isActive ? 'Snooze' : 'Un-snooze'}
-          className='transaction-action'
-          onClick={(e) => {
-            e.preventDefault();
-            changeActiveState(transaction.id);
-          }}/>
-        <input
-          type='submit'
-          value='Submit'
-          className='transaction-action'/>
+        <span className='transaction-amount'>Amount: {transaction.amount}</span>
+        <span className='transaction-date'>Date: {transaction.date}</span>
+        <span className='transaction-account'>Account: {transaction.account}</span>
+        <div className='transaction-action-buttons'>
+          <input
+            type='submit'
+            value={transaction.isActive ? 'Snooze' : 'Un-snooze'}
+            className='transaction-action transaction-snooze'
+            onClick={(e) => {
+              e.preventDefault();
+              changeActiveState(transaction.id);
+            }}/>
+          <input
+            type='submit'
+            value='Submit'
+            className='transaction-action transaction-submit'/>
+        </div>
       </div>
     </div>
   )
