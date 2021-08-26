@@ -41,14 +41,13 @@ class Transactions extends React.Component {
     this.setState({ activeIsDisplayed: !activeIsDisplayed });
   }
 
-  reconcileAction(id) {
+  reconcileAction(reconciled) {
+    const { id } = reconciled;
     const { transactions } = this.state;
     const updatedTransactions = transactions.map((transaction) => {
       if (transaction.id === id) {
-        transaction.reconciled = true
-        axios.post('http://localhost:3000/api/set_reconciled', {
-          reconciled: true, id
-        })
+        transaction = {...reconciled}
+        axios.post('http://localhost:3000/api/set_reconciled', { transaction: reconciled })
       }
       return transaction;
     })

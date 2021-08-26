@@ -4,8 +4,15 @@ const { User, Transaction } = require('../../database');
 
 router
   .post('/set_reconciled', (req, res) =>{
-    const { reconciled, id } = req.body;
-    Transaction.update({ reconciled }, {  where: { id } })
+    const { transaction } = req.body;
+    console.log(transaction);
+    Transaction.update({
+      merchant: transaction.merchant,
+      name: transaction.name,
+      description: transaction.description,
+      isActive: transaction.isActive,
+      reconciled: transaction.reconciled,
+    }, {  where: { id: transaction.id } })
       .then((response) => res.status(200).json(response))
       .catch((error) => res.status(404).json(error));
   })
@@ -60,6 +67,9 @@ router
             id: item.transaction_id,
             username,
             amount: item.amount,
+            merchant: item.merchant_name,
+            name: item.name,
+            description: '',
             account: accounts[item.account_id],
             date: item.date,
             isActive: true,

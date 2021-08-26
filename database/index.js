@@ -41,6 +41,15 @@ const Transaction = sequelize.define('Transaction', {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
+  merchant: {
+    type: DataTypes.STRING,
+  },
+  name: {
+    type: DataTypes.STRING,
+  },
+  description: {
+    type: DataTypes.STRING,
+  },
   account: {
     type: DataTypes.STRING,
     allowNull: false,
