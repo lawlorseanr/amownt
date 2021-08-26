@@ -26,8 +26,21 @@ class Transactions extends React.Component {
     const { username } = this.state;
     axios.post('http://localhost:3000/api/get_transactions', { username })
       .then((response) => {
+        const transactions = response.data;
+        const sortFn = (a, b) => {
+          if (a.date < b.date) {
+            return -1;
+          }
+          if (a.date > b.date) {
+            return 1;
+          }
+          return 0;
+        }
+
+        const sortedTransactions = transactions.sort(sortFn);
+
         this.setState({
-          transactions: response.data,
+          transactions: sortedTransactions,
         })
       })
       .catch((error) => {

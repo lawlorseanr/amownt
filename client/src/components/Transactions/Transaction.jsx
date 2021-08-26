@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import moment from 'moment';
 
 export default ({ transaction, changeActiveState, reconcileAction }) => {
   const [who, setWho] = useState(transaction.merchant);
@@ -9,7 +10,7 @@ export default ({ transaction, changeActiveState, reconcileAction }) => {
     <div className='transaction'>
       <div className='transaction-info'>
         <label className='transaction-label'>
-          Who:
+          <span className='transaction-label-text'>Merchant:</span>
           <input
             type='text'
             name='transaction-who'
@@ -19,7 +20,7 @@ export default ({ transaction, changeActiveState, reconcileAction }) => {
           />
         </label>
         <label className='transaction-label'>
-          What:
+        <span className='transaction-label-text'>Detail:</span>
           <input
             type='text'
             name='transaction-what'
@@ -29,7 +30,7 @@ export default ({ transaction, changeActiveState, reconcileAction }) => {
           />
         </label>
         <label className='transaction-label'>
-          Why:
+        <span className='transaction-label-text'>Description:</span>
           <input
             type='text'
             name='transaction-why'
@@ -40,8 +41,8 @@ export default ({ transaction, changeActiveState, reconcileAction }) => {
         </label>
       </div>
       <div className='transaction-action'>
-        <span className='transaction-amount'>Amount: {transaction.amount}</span>
-        <span className='transaction-date'>Date: {transaction.date}</span>
+        <span className='transaction-amount'>Amount: ${transaction.amount.toFixed(2)}</span>
+        <span className='transaction-date'>Date: {moment(transaction.date).format('LL')}</span>
         <span className='transaction-account'>Account: {transaction.account}</span>
         <div className='transaction-action-buttons'>
           <input
@@ -54,7 +55,7 @@ export default ({ transaction, changeActiveState, reconcileAction }) => {
             }}/>
           <input
             type='submit'
-            value='Submit'
+            value='Reconcile'
             className='transaction-action transaction-submit'
             onClick={(e) => {
               e.preventDefault();

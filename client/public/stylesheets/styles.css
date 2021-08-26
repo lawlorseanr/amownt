@@ -39,7 +39,7 @@ span.slider {
 
 div#active {
   justify-content: flex-end;
-  margin: auto 19px auto 0;
+  margin: auto 20px auto 0;
 }
 
 div#snooze {
@@ -69,11 +69,15 @@ h1#header-text {
   flex-direction: row;
   flex: 1;
   padding: 5px;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.8);
   border-radius: 5px;
   margin-top: 10px;
   justify-content: space-between;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.45);
+}
+
+span.transaction-label-text {
+  margin-right: 10px;
 }
 
 label.transaction-label {
@@ -93,7 +97,7 @@ label.transaction-label {
 }
 
 .transaction-input {
-  min-width: 370px;
+  min-width: 350px;
   margin-bottom: 2px;
 }
 
