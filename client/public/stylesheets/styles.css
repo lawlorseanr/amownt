@@ -31,6 +31,12 @@ body {
   flex-direction: column;
 }
 
+#page-switch {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+}
+
 span.slider {
   display: flex;
   flex: 1;
@@ -81,6 +87,12 @@ h1#header-text {
 
 span.transaction-label-text {
   margin-right: 10px;
+}
+
+span.transaction-merchant,
+span.transaction-name,
+span.transaction-description {
+  text-align: left;
 }
 
 label.transaction-label {
@@ -139,6 +151,15 @@ button#fetch-data-button {
   display: inline-block;
   width: 150px;
   height: 34px;
+}
+
+h3.pages {
+  font-style: normal;
+}
+
+h3.pages:hover {
+  color: blue;
+  cursor: pointer;
 }
 
 .switch input {

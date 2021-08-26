@@ -7,7 +7,6 @@ class Transactions extends React.Component {
     super(props);
 
     this.state = {
-      transactionsPage: true,
       activeIsDisplayed: true,
       transactions: [],
       fetchAttempt: 0,
@@ -18,6 +17,7 @@ class Transactions extends React.Component {
     this.changeActiveState = this.changeActiveState.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.reconcileAction = this.reconcileAction.bind(this);
+    this.handlePageChange = props.handlePageChange;
   }
 
   fetchData() {
@@ -90,7 +90,11 @@ class Transactions extends React.Component {
     return (
       <div id='transactions'>
         <div id='transactions-filter'>
-          <h3>Reconciliation</h3>
+          <div id='page-switch'>
+            <h3 className='pages' onClick={() => this.handlePageChange('transactions')}>Reconciliation</h3>
+            <h3>&nbsp;&nbsp;&nbsp;{'|'}&nbsp;&nbsp;&nbsp;</h3>
+            <h3 className='pages' onClick={() => this.handlePageChange('reconciled')}>Transactions</h3>
+          </div>
           <div id='transaction-list-action'>
             <img id='loading-gif' src="./images/spiffygif_46x46.gif" alt='Spinner' />
             <label htmlFor='delay-toggle' className='switch'>

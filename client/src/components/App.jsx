@@ -1,6 +1,6 @@
 import React from 'react';
 import Transactions from './Transactions.jsx';
-import Accounts from './Accounts.jsx';
+import Reconciled from './Reconciled.jsx';
 import Plaid from './PlaidLink.jsx';
 import axios from 'axios';
 
@@ -10,7 +10,7 @@ class App extends React.Component {
 
     this.state = {
       authenticate: null,
-      transactionsPage: true,
+      page: 'transactions',
       username: null,
       checkedUser: false,
     };
@@ -25,6 +25,11 @@ class App extends React.Component {
     }
 
     this.checkUser(this.state.username);
+    this.handlePageChange = this.handlePageChange.bind(this);
+  }
+
+  handlePageChange(page) {
+    this.setState({ page });
   }
 
   checkUser(username) {
@@ -50,10 +55,12 @@ class App extends React.Component {
       PAGE = <></>;
     } else if (this.state.authenticate) {
       PAGE = <Plaid handleAccess={this.handleAccess} username={this.state.username}/>
-    } else if (this.state.transactionsPage) {
-      PAGE = <Transactions username={this.state.username}/>
     } else {
-      PAGE = <Accounts />
+      if (this.state.page === 'transactions') {
+        PAGE = <Transactions handlePageChange={this.handlePageChange} username={this.state.username}/>
+      } else if (this.state.page === 'reconciled') {
+        PAGE = <Reconciled handlePageChange={this.handlePageChange} username={this.state.username}/>
+      }
     }
 
     return (
