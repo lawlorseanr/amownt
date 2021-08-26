@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default ({ transaction, changeActiveState }) => {
+export default ({ transaction, changeActiveState, reconcileAction }) => {
   return (
     <div className='transaction'>
       <div className='transaction-info'>
@@ -33,7 +33,11 @@ export default ({ transaction, changeActiveState }) => {
           <input
             type='submit'
             value='Submit'
-            className='transaction-action transaction-submit'/>
+            className='transaction-action transaction-submit'
+            onClick={(e) => {
+              e.preventDefault();
+              reconcileAction(transaction.id);
+            }}/>
         </div>
       </div>
     </div>

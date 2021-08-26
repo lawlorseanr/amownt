@@ -17,6 +17,7 @@ class Transactions extends React.Component {
     this.changeActiveIsDisplayed = this.changeActiveIsDisplayed.bind(this);
     this.changeActiveState = this.changeActiveState.bind(this);
     this.fetchData = this.fetchData.bind(this);
+    this.reconcileAction = this.reconcileAction.bind(this);
   }
 
   fetchData() {
@@ -40,6 +41,20 @@ class Transactions extends React.Component {
     this.setState({ activeIsDisplayed: !activeIsDisplayed });
   }
 
+  reconcileAction(id) {
+    const { transactions } = this.state;
+    const updatedTransactions = transactions.map((transaction) => {
+      if (transaction.id === id) {
+        transaction.reconciled = true
+        axios.post('http://localhost:3000/api/set_reconciled', {
+          reconciled: true, id
+        })
+      }
+      return transaction;
+    })
+    this.setState({ transactions: updatedTransactions });
+  }
+
   changeActiveState(id) {
     const { transactions } = this.state;
     const updatedTransactions = transactions.map((transaction) => {
@@ -51,7 +66,6 @@ class Transactions extends React.Component {
       }
       return transaction;
     })
-
     this.setState({ transactions: updatedTransactions });
   }
 
@@ -88,7 +102,8 @@ class Transactions extends React.Component {
         </div>
         <TransactionList
           state={this.state}
-          changeActiveState={this.changeActiveState}/>
+          changeActiveState={this.changeActiveState}
+          reconcileAction={this.reconcileAction}/>
       </div>
     );
   }

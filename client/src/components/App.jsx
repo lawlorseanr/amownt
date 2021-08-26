@@ -17,7 +17,7 @@ class App extends React.Component {
 
     this.handleAccess = this.handleAccess.bind(this);
 
-    const username = prompt('Please enter your username :', 'sean');
+    const username = prompt('Please enter your username:', 'sean');
     if (username !== null) {
       this.state.username = username;
     } else {

@@ -3,6 +3,12 @@ const axios = require('axios');
 const { User, Transaction } = require('../../database');
 
 router
+  .post('/set_reconciled', (req, res) =>{
+    const { reconciled, id } = req.body;
+    Transaction.update({ reconciled }, {  where: { id } })
+      .then((response) => res.status(200).json(response))
+      .catch((error) => res.status(404).json(error));
+  })
   .post('/set_snooze', (req, res) => {
     const { isActive, id } = req.body;
     Transaction.update({ isActive }, {  where: { id } })
