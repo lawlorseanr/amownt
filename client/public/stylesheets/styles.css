@@ -48,8 +48,9 @@ h1#header-text {
   padding: 5px;
   border: 1px solid black;
   border-radius: 5px;
-  margin-top: 5px;
+  margin-top: 10px;
   justify-content: space-between;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.45);
 }
 
 label.transaction-label {
