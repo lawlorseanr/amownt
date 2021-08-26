@@ -60,6 +60,7 @@ class App extends React.Component {
       <div id='app'>
         <div id='header'>
           <h1 id='header-text'>Amownt</h1>
+          <h4 id='header-subtext'>own your accounting</h4>
         </div>
         {PAGE}
       </div>

@@ -20,12 +20,14 @@ body {
 #header {
   display: flex;
   flex: 1;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
+h4#header-subtext,
 h1#header-text {
   color: black;
+  margin: 0;
 }
 
 #app {
