@@ -45,9 +45,13 @@ class Transactions extends React.Component {
     const updatedTransactions = transactions.map((transaction) => {
       if (transaction.id === id) {
         transaction.isActive = !transaction.isActive
+        axios.post('http://localhost:3000/api/set_snooze', {
+          isActive: transaction.isActive, id
+        })
       }
       return transaction;
     })
+
     this.setState({ transactions: updatedTransactions });
   }
 
