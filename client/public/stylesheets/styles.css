@@ -22,6 +22,7 @@ body {
   flex: 1;
   flex-direction: row;
   justify-content: space-between;
+  position: sticky;
 }
 
 #header-title {
@@ -49,6 +50,8 @@ div#snooze {
 
 h4#header-subtext,
 h1#header-text {
+  display: flex;
+  flex: 1;
   color: black;
   margin: 0;
 }
