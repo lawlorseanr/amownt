@@ -63,7 +63,7 @@ class Transactions extends React.Component {
           <h3>Reconciliation</h3>
           <div id='transaction-list-action'>
             <img id='loading-gif' src="./images/spiffygif_46x46.gif" alt='Spinner' />
-            <button
+            {/* <button
               id='fetch-data-button'
               type='Submit'
               onClick={(e) => {
@@ -71,7 +71,7 @@ class Transactions extends React.Component {
                 this.fetchData();
               }}>
             Fetch Data
-            </button>
+            </button> */}
             <label htmlFor='delay-toggle' className='switch'>
               <input
                 id='delay-toggle'

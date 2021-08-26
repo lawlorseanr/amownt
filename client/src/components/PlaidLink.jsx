@@ -13,7 +13,7 @@ const App = ({ username, handleAccess }) => {
       }
     })
       .then((response) => {
-        setLinkToken(response.link_token);
+        setLinkToken(response.data);
       })
       .catch((error) => {
         console.error('paidLink error: ', error);
@@ -54,6 +54,12 @@ const App = ({ username, handleAccess }) => {
 // Use Plaid Link and pass link token and onSuccess function
 // in configuration to initialize Plaid Link
 const Link = ({ username, linkToken, handleAccess}) => {
+  const setTransactions = (username) => {
+    axios.post('http://localhost:3000/api/set_transactions', { username })
+      .then(() => handleAccess())
+      .catch((error) => { throw error; });
+  }
+
   const onSuccess = React.useCallback((public_token, metadata) => {
     // send public_token to server
     axios.post(
@@ -64,11 +70,8 @@ const Link = ({ username, linkToken, handleAccess}) => {
         'Content-Type': 'application/json',
       },
     })
-      .then(() => axios.post('http://localhost:3000/api/transactions', { username }))
-      .then(() => handleAccess())
-      .catch((error) => {
-        console.error('Error exchanging token');
-      });
+      .then(() => setTimeout(setTransactions(username), 1500))
+      .catch((error) => console.error(error));
 
   }, []);
   const config = {

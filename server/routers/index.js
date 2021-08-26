@@ -31,19 +31,19 @@ router
         res.status(404).json(error);
       })
   })
-  .post('/transactions', (req, res) => {
+  .post('/set_transactions', (req, res) => {
     const { username } = req.body;
     let accounts;
     axios.post('http://localhost:8000/api/accounts', { username })
-      .then((response) => {
-        accounts = response.data.accounts.reduce((accumulator, account) => {
+      .then((accountsResponse) => {
+        accounts = accountsResponse.data.accounts.reduce((accumulator, account) => {
           accumulator[account.account_id] = account.name;
           return accumulator;
         }, {})
         return axios.post('http://localhost:8000/api/transactions', { username });
       })
-      .then((response) => {
-        return response.data.reduce((accumulator, item) => {
+      .then((transactionsResponse) => {
+        return transactionsResponse.data.reduce((accumulator, item) => {
           const itemObj = {
             id: item.transaction_id,
             username,
@@ -60,6 +60,7 @@ router
       .then((data) => {
         Transaction.bulkCreate(data)
           .then((createResponse) => {
+            console.log('set transactions');
             console.log(createResponse);
             res.status(200).json(createResponse);
           })

@@ -2,23 +2,39 @@ import React from 'react';
 import Transactions from './Transactions.jsx';
 import Accounts from './Accounts.jsx';
 import Plaid from './PlaidLink.jsx';
+import axios from 'axios';
 
 class App extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      authenticate: true,
+      authenticate: null,
       transactionsPage: true,
       username: null,
+      checkedUser: false,
     };
 
     this.handleAccess = this.handleAccess.bind(this);
 
     const username = prompt('Please enter your username :', 'sean');
     if (username !== null) {
-      this.state.username = username
+      this.state.username = username;
+    } else {
+      this.state.username = 'user';
     }
+
+    this.checkUser(this.state.username);
+  }
+
+  checkUser(username) {
+    axios.post('http://localhost:3000/api/user', { username })
+      .then((response) => {
+        const authenticate = response.status === 201
+        const checkedUser = true;
+        this.setState({ authenticate, checkedUser })
+      })
+      .catch((error) => console.error(error));
   }
 
   handleAccess() {
@@ -30,7 +46,9 @@ class App extends React.Component {
 
   render() {
     let PAGE;
-    if (this.state.authenticate) {
+    if (!this.state.checkedUser) {
+      PAGE = <></>;
+    } else if (this.state.authenticate) {
       PAGE = <Plaid handleAccess={this.handleAccess} username={this.state.username}/>
     } else if (this.state.transactionsPage) {
       PAGE = <Transactions username={this.state.username}/>

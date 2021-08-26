@@ -56,6 +56,7 @@ router
       where: { username }
     });
     const ACCESS_TOKEN = queryData[0].dataValues.access_token;
+    console.log('access token: ', ACCESS_TOKEN);
 
     const plaidRequest = {
       access_token: ACCESS_TOKEN,
@@ -63,7 +64,23 @@ router
       end_date: '2020-02-01'
     };
     try {
-      const plaidResponse = await client.transactionsGet(plaidRequest);
+      let plaidResponse;
+      let notFound = true;
+      let attempt = 0;
+      while (attempt < 10 && notFound) {
+        plaidResponse = await client.transactionsGet(plaidRequest);
+        console.log('transactions: ', plaidResponse.data.transactions);
+        if (plaidResponse.data.transactions.length === 0) {
+          attempt += 1;
+        } else {
+          notFound = false;
+        }
+      }
+
+      if (notFound) {
+        return res.status(404).error('No transactions found.');
+      }
+
       let transactions = plaidResponse.data.transactions;
       const total_transactions = plaidResponse.data.total_transactions;
 
@@ -138,6 +155,7 @@ router
       User.update({ public_token, access_token },
         { where: { username } })
         .then((updateResponse) => {
+          console.log('added access token to db');
           response.status(200).json(updateResponse);
         })
         .catch((error) => {
