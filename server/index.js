@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const router = require('./routers');
+const db = require('../database');
 
 const HOST = 'localhost';
 const PORT = 3000;

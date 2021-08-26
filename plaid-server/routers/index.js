@@ -3,6 +3,7 @@ const router = require('express').Router();
 const { Configuration, PlaidApi, PlaidEnvironments } = require('plaid');
 const util = require('util');
 const CONFIG = require('../config/config');
+const { User, Transaction } = require('../../database');
 
 const prettyPrintResponse = (response) => {
   console.log(util.inspect(response.data, { colors: true, depth: 4 }));
@@ -14,8 +15,6 @@ const formatError = (error) => {
   };
 };
 
-let ACCESS_TOKEN = null;
-let PUBLIC_TOKEN = null;
 let ITEM_ID = null;
 
 const configuration = new Configuration({
@@ -32,19 +31,32 @@ const configuration = new Configuration({
 const client = new PlaidApi(configuration);
 
 router
-  .get('/accounts', async (request, response) => {
+  .post('/accounts', async (request, response) => {
+    const { username } = request.body;
+    const queryData = await User.findAll({
+      attributes: ['access_token'],
+      where: { username }
+    });
+    const ACCESS_TOKEN = queryData[0].dataValues.access_token;
+
     try {
       const accountsResponse = await client.accountsGet({
         access_token: ACCESS_TOKEN,
       });
-      prettyPrintResponse(accountsResponse);
       response.status(200).json(accountsResponse.data);
     } catch (error) {
       prettyPrintResponse(error);
       return response.status(404).json(formatError(error.response));
     }
   })
-  .get('/transactions', async (request, response) => {
+  .post('/transactions', async (request, response) => {
+    const { username } = request.body;
+    const queryData = await User.findAll({
+      attributes: ['access_token'],
+      where: { username }
+    });
+    const ACCESS_TOKEN = queryData[0].dataValues.access_token;
+
     const plaidRequest = {
       access_token: ACCESS_TOKEN,
       start_date: '2018-01-01',
@@ -85,10 +97,11 @@ router
     response.status(200).json(responseObj)
   })
   .post('/create_link_token', async (request, response) => {
+    const { username } = request.body;
     const configs = {
       user: {
         // This should correspond to a unique id for the current user.
-        client_user_id: 'user-id',
+        client_user_id: username,
       },
       client_name: 'Plaid Quickstart',
       products: CONFIG.PLAID_PRODUCTS,
@@ -100,31 +113,39 @@ router
 
     try {
       const createTokenResponse = await client.linkTokenCreate(configs);
-      prettyPrintResponse(createTokenResponse);
-      response.json(createTokenResponse.data);
+      const { link_token, expiration } = createTokenResponse.data;
+      User.update({ link_token, expiration }, {  where: { username } })
+        .then(() => {
+          prettyPrintResponse(createTokenResponse);
+          response.json(link_token);
+        })
+        .catch((error) => {
+          response.status(404).send(error)
+        });
+
     } catch (error) {
       prettyPrintResponse(error.response);
       return response.json(formatError(error.response));
     }
   })
   .post('/set_access_token', async (request, response, next) => {
-    PUBLIC_TOKEN = request.body.public_token;
+    const { username, public_token } = request.body;
     try {
       const tokenResponse = await client.itemPublicTokenExchange({
-        public_token: PUBLIC_TOKEN,
+        public_token,
       });
-      prettyPrintResponse(tokenResponse);
-      ACCESS_TOKEN = tokenResponse.data.access_token;
-      ITEM_ID = tokenResponse.data.item_id;
-      const responseObj = {
-        access_token: ACCESS_TOKEN,
-        item_id: ITEM_ID,
-        error: null,
-      }
-      response.status(200).json(responseObj);
+      const access_token = tokenResponse.data.access_token;
+      User.update({ public_token, access_token },
+        { where: { username } })
+        .then((updateResponse) => {
+          response.status(200).json(updateResponse);
+        })
+        .catch((error) => {
+          response.status(404).send(error);
+        })
     } catch (error) {
-      prettyPrintResponse(error.response);
-      return response.status(404).json(formatError(error.response));
+      prettyPrintResponse(error);
+      return response.status(404).json(formatError(error));
     }
   });
 

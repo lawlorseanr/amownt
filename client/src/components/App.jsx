@@ -10,26 +10,30 @@ class App extends React.Component {
     this.state = {
       authenticate: true,
       transactionsPage: true,
-      token: null,
+      username: null,
     };
 
     this.handleAccess = this.handleAccess.bind(this);
+
+    const username = prompt('Please enter your username :', 'sean');
+    if (username !== null) {
+      this.state.username = username
+    }
   }
 
-  handleAccess(token) {
+  handleAccess() {
     const { authenticate } = this.state;
     this.setState({
       authenticate: !authenticate,
-      token,
     })
   }
 
   render() {
     let PAGE;
     if (this.state.authenticate) {
-      PAGE = <Plaid handleAccess={this.handleAccess}/>
+      PAGE = <Plaid handleAccess={this.handleAccess} username={this.state.username}/>
     } else if (this.state.transactionsPage) {
-      PAGE = <Transactions />
+      PAGE = <Transactions username={this.state.username}/>
     } else {
       PAGE = <Accounts />
     }

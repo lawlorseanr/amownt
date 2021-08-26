@@ -3,14 +3,15 @@ import TransactionList from './Transactions/TransactionList.jsx';
 import axios from 'axios';
 
 class Transactions extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       transactionsPage: true,
       activeIsDisplayed: true,
       transactions: [],
       fetchAttempt: 0,
+      username: props.username,
     }
 
     this.changeActiveIsDisplayed = this.changeActiveIsDisplayed.bind(this);
@@ -19,7 +20,10 @@ class Transactions extends React.Component {
   }
 
   fetchData() {
-    axios.get('http://localhost:3000/api/transactions')
+    const gif = document.getElementById('loading-gif');
+    gif.style.opacity = 1;
+    const { username } = this.state;
+    axios.post('http://localhost:3000/api/get_transactions', { username })
       .then((response) => {
         this.setState({
           transactions: response.data,
@@ -28,6 +32,7 @@ class Transactions extends React.Component {
       .catch((error) => {
         console.error(error);
       })
+      .finally(() => gif.style.opacity = 0);
   }
 
   changeActiveIsDisplayed() {
@@ -47,7 +52,8 @@ class Transactions extends React.Component {
   }
 
   componentDidMount() {
-    setTimeout(this.fetchData, 3500);
+    document.getElementById('loading-gif').style.opacity = 1;
+    this.fetchData();
   }
 
   render() {
@@ -56,6 +62,7 @@ class Transactions extends React.Component {
         <div id='transactions-filter'>
           <h3>Reconciliation</h3>
           <div id='transaction-list-action'>
+            <img id='loading-gif' src="./images/spiffygif_46x46.gif" alt='Spinner' />
             <button
               id='fetch-data-button'
               type='Submit'

@@ -2,48 +2,70 @@ import React, { useEffect, useState } from 'react';
 import { usePlaidLink } from 'react-plaid-link';
 import axios from 'axios';
 
-const App = ({ handleAccess }) => {
+const App = ({ username, handleAccess }) => {
   const [linkToken, setLinkToken] = useState(null);
 
   const generateToken = () => {
-    axios.post('http://localhost:8000/api/create_link_token', {
+    axios.post('http://localhost:8000/api/create_link_token', { username }, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       }
     })
       .then((response) => {
-        setLinkToken(response.data.link_token);
+        setLinkToken(response.link_token);
       })
       .catch((error) => {
-        console.error(error);
+        console.error('paidLink error: ', error);
       })
   }
 
   useEffect(() => {
-    generateToken();
+    axios.post('http://localhost:3000/api/user', { username }, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      }
+    })
+      .then((response) => {
+        const data = response.data;
+        if (data.link_token !== null) {
+          setLinkToken(data.link_token);
+        } else {
+          generateToken(username);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
-  return linkToken != null ? <Link handleAccess={handleAccess} linkToken={linkToken} /> : <></>;
+  if (linkToken === null) {
+    return <></>;
+  }
+  return <Link
+    username={username}
+    linkToken={linkToken}
+    handleAccess={handleAccess}
+  />;
 };
 
 // LINK COMPONENT
 // Use Plaid Link and pass link token and onSuccess function
 // in configuration to initialize Plaid Link
-const Link = ({ handleAccess, linkToken}) => {
+const Link = ({ username, linkToken, handleAccess}) => {
   const onSuccess = React.useCallback((public_token, metadata) => {
     // send public_token to server
     axios.post(
       'http://localhost:8000/api/set_access_token',
-      {public_token}, {
+      { username, public_token }, {
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
       },
     })
-      .then((response) => {
-        handleAccess(response.data.access_token);
-      })
+      .then(() => axios.post('http://localhost:3000/api/transactions', { username }))
+      .then(() => handleAccess())
       .catch((error) => {
         console.error('Error exchanging token');
       });

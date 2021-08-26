@@ -137,3 +137,12 @@ input:checked + .slider:before {
   -ms-transform: translateX(70px);
   transform: translateX(70px);
 }
+
+img#loading-gif {
+  display: flex;
+  flex: 0;
+  width: 46px;
+  height: 46px;
+  margin: auto 10px auto auto;
+  opacity: 0;
+}
