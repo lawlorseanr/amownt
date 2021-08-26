@@ -20,8 +20,31 @@ body {
 #header {
   display: flex;
   flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#header-title {
+  display: flex;
+  flex: 1;
   flex-direction: column;
+}
+
+span.slider {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+div#active {
+  justify-content: flex-end;
+  margin: auto 19px auto 0;
+}
+
+div#snooze {
   justify-content: flex-start;
+  margin: auto 0 auto 10px;
 }
 
 h4#header-subtext,

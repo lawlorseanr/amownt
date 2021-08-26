@@ -59,8 +59,13 @@ class App extends React.Component {
     return (
       <div id='app'>
         <div id='header'>
-          <h1 id='header-text'>Amownt</h1>
-          <h4 id='header-subtext'>own your accounting</h4>
+          <div id='header-title'>
+            <h1 id='header-text'>Amownt</h1>
+            <h4 id='header-subtext'>own your accounting</h4>
+          </div>
+          <div id='header-user'>
+            <h3>user: {this.state.username}</h3>
+          </div>
         </div>
         {PAGE}
       </div>

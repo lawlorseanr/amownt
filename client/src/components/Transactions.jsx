@@ -80,22 +80,16 @@ class Transactions extends React.Component {
           <h3>Reconciliation</h3>
           <div id='transaction-list-action'>
             <img id='loading-gif' src="./images/spiffygif_46x46.gif" alt='Spinner' />
-            {/* <button
-              id='fetch-data-button'
-              type='Submit'
-              onClick={(e) => {
-                e.preventDefault();
-                this.fetchData();
-              }}>
-            Fetch Data
-            </button> */}
             <label htmlFor='delay-toggle' className='switch'>
               <input
                 id='delay-toggle'
                 type='checkbox'
                 onChange={() => this.changeActiveIsDisplayed()}
               />
-              <span className='slider' />
+              <span className='slider'>
+                <div id='snooze'>Snoozed</div>
+                <div id='active'>Active</div>
+              </span>
             </label>
           </div>
         </div>
