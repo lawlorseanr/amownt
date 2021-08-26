@@ -16,8 +16,8 @@ class Reconciled extends React.Component {
   }
 
   fetchData() {
-    // const gif = document.getElementById('loading-gif');
-    // gif.style.opacity = 1;
+    const gif = document.getElementById('loading-gif');
+    gif.style.opacity = 1;
     const { username } = this.state;
     axios.post('http://localhost:3000/api/get_transactions', { username })
       .then((response) => {
@@ -40,11 +40,11 @@ class Reconciled extends React.Component {
       .catch((error) => {
         console.error(error);
       })
-      // .finally(() => gif.style.opacity = 0);
+      .finally(() => gif.style.opacity = 0);
   }
 
   componentDidMount() {
-    // document.getElementById('loading-gif').style.opacity = 1;
+    document.getElementById('loading-gif').style.opacity = 1;
     this.fetchData();
   }
 
@@ -56,6 +56,7 @@ class Reconciled extends React.Component {
           <h3 className='pages' onClick={() => this.handlePageChange('transactions')}>Reconciliation</h3>
           <h3>&nbsp;&nbsp;&nbsp;{'|'}&nbsp;&nbsp;&nbsp;</h3>
           <h3 className='pages' onClick={() => this.handlePageChange('reconciled')}>Transactions</h3>
+          <img id='loading-gif' src="./images/spiffygif_46x46.gif" alt='Spinner' />
         </div>
         <ReconciledList reconciled={this.state.reconciled}/>
       </div>
